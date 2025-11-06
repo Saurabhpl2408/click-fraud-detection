@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Data files
+data/raw/*.csv
+data/raw/*.zip
+*.csv
+*.parquet
+
+# Models
+data/models/*.pkl
+data/models/*.joblib
+
+# Environment
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/*.log
+*.log
+
+# Docker
+docker-compose.override.yml

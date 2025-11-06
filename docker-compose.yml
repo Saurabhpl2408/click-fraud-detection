@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: fraud_postgres
+    environment:
+      POSTGRES_USER: frauduser
+      POSTGRES_PASSWORD: fraudpass123
+      POSTGRES_DB: fraud_detection
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./config/postgres_init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - fraud_network
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: fraud_jenkins
+    privileged: true
+    user: root
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./:/workspace
+    networks:
+      - fraud_network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: fraud_grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - fraud_network
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+  jenkins_home:
+  grafana_data:
+
+networks:
+  fraud_network:
+    driver: bridge
